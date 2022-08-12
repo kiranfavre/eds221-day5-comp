@@ -6,6 +6,7 @@ editor: visual
 
 ```{r}
 library(testthat)
+library(here)
 ```
 
 ## Examples of unit testing
@@ -42,4 +43,19 @@ Is the type what you expected?
 expect_type(mean_range(mtcars), "double")  # this works!
 
 expect_type(mean_range(mtcars), "vector")  #this returns an error message
+```
+
+## Source a script
+
+```{r}
+source(here::here("src", "food_cart_functions_morning.R"))
+
+name_cart(food = "lasagna", animal = "shark")
+```
+
+```{r}
+source(here::here("src", "cork_oak_growth.R"))
+
+tree_ages <- seq(from = 4, to = 50, by = 1)
+
 ```
