@@ -34,6 +34,7 @@ The initial population structure is given by:
 fish_year0 <- c(5000, 8000, 600, 400)
 ```
 
+Now, as time continues, we will be multiplying the matrix by time
 
 Add line-by-line comments wheres prompted in the code below, explaining what each is doing. Make sure that you are talking with your neighbors about what is really being created at each step. 
 
@@ -44,25 +45,32 @@ Add line-by-line comments wheres prompted in the code below, explaining what eac
 # ------ comment line-by-line ---- #
 
 # The line below...
-time_yr <- seq(from = 0, to = 8, by = 1)
+time_yr <- seq(from = 0, to = 8, by = 1) ## Making a time vector
 
 # The line below...
-proj_year <- matrix(ncol = length(fish_year0), nrow = length(time_yr))
+proj_year <- matrix(ncol = length(fish_year0), nrow = length(time_yr))  ##  creates an empty matrix to fill up with values created via for loop iteration
 
 # The line below...
-proj_year[1, ] <- fish_year0
+proj_year[1, ] <- fish_year0 ## set initial conditions to first row of our empty matrix
+### [row, column]
 
 # The for loop below...
 for (i in 2:length(time_yr)) {
   proj_year[i,] <- fish_leslie %*% proj_year[i-1,]
-}
+} ## starting from position 2 and iterating to the full length of the time vector (0-8), because we already set our initial condition
+## populating the empty matrix with values run thru the leslie matrix at time 2-8 ((dot product of leslie matrix and previous year's matrix (first one is initial conditions)))
+## output is a vector that we will populate with i year 
+## Row 1 is initial, row 2 is y ear 1, row 3 is year 2, row 4 is year 3...
 
 
 # The rest is wrangling & visualization (run to check it out):
-colnames(proj_year) <- c("eggs", "fry", "juvenile", "adult")
+colnames(proj_year) <- c("eggs", "fry", "juvenile", "adult")  #naming the column names 
 
 proj_df <- data.frame(time_yr, proj_year) %>% 
   pivot_longer(cols = -time_yr, names_to = "lifestage", values_to = "stage_population")
+## collapse everything except for time_yr column, take the og names of the column and name them lifestage, and the values to stage pop
+##naming a data frame "proj_df", and then changing df from wide to long where the columns become the time in years
+## negative time_yr in line 65 means that you are collapsing everything, except for time!
 
 ggplot(data = proj_df, aes(x = time_yr, y = stage_population)) +
   geom_line(aes(color = lifestage)) +
