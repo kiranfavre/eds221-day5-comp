@@ -1,0 +1,45 @@
+---
+title: "unit test intro"
+format: html
+editor: visual
+---
+
+```{r}
+library(testthat)
+```
+
+## Examples of unit testing
+
+```{r}
+mean_range <- function(df) {
+  col_means <- apply(X = df,
+                     MARGIN = 2,
+                     FUN = mean,
+                     na.rm = TRUE)
+  col_mean_max <- max(col_means)
+  col_mean_min <- min(col_means)
+  print(c(col_mean_max, col_mean_min))
+}
+
+mean_range(mtcars)
+```
+
+Is the output of this function of length 3?
+
+```{r}
+expect_length(mean_range(mtcars), 3)
+```
+
+Is the output of this function true to the conditions you inputted?
+
+```{r}
+expect_true(mean_range(mtcars)[1] >= mean_range(mtcars)[2])
+```
+
+Is the type what you expected?
+
+```{r}
+expect_type(mean_range(mtcars), "double")  # this works!
+
+expect_type(mean_range(mtcars), "vector")  #this returns an error message
+```
