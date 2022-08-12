@@ -1,0 +1,21 @@
+---
+title: "tilapia_imports"
+author: "Kiran Favre"
+date: "2022-08-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(here)
+library(janitor)
+```
+
+```{r}
+us_tilapia_imports <- read_csv(here::here("data", "us_tilapia_imports.csv")) |> 
+  pivot_longer( cols = -country, names_to = "year", values_to = "population")
+
+
+```
+
