@@ -14,8 +14,31 @@ library(janitor)
 
 ```{r}
 us_tilapia_imports <- read_csv(here::here("data", "us_tilapia_imports.csv")) |> 
-  pivot_longer( cols = -country, names_to = "year", values_to = "population")
-
+  pivot_longer( cols = -country, names_to = "year", values_to = "population") 
 
 ```
+
+```{r}
+tilapia_df_mutated <- mutate(us_tilapia_imports, year = as.numeric(year))
+```
+
+```{r}
+yearly_tilapia_tot <- tilapia_df_mutated |>
+  dplyr::group_by(year) |>  #group pop from each years together
+  summarize(import = sum(population, na.rm = TRUE))
+```
+
+```{r}
+ggplot(yearly_tilapia_tot, aes(x = year, y = import)) +
+  geom_line()
+```
+
+```{r}
+tilapia_by_country <- us_tilapia_imports |> 
+  filter(country %in% c("Ecuador", "Honduras", "Mexico", "Costa Rica"))
+
+ggplot(data = tilapia_by_country, aes( x = country, y = population)) +
+  geom_line()
+```
+
 
